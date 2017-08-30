@@ -1,0 +1,60 @@
+/* some style */
+
+@import url('https://fonts.googleapis.com/css?family=Patrick+Hand');
+
+html {
+    font-family:Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+#the-word {
+    font-family:"Helvetica", cursive, sans-serif;
+    font-family:"Futura";
+    font-family:"Comic Sans MS", cursive, sans-serif;
+    font-family: 'Patrick Hand', cursive;
+    color: rgb(0,100,0);
+    background-color: rgb(200,250,200);
+    font-size: 1000%;
+    padding: 50px;
+}
+
+.big {
+    font-size: 200%;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px;
+    cursor: pointer;
+}
+
+.medium {
+    font-size: 150%;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.red {
+    background-color: rgb(155,100,100);
+}
+
+.green {
+    background-color: rgb(50,255,50);
+}
+
+#new-word-label {
+    margin: 5px;
+    font-size: 200%;
+}
+
+#new-word {
+    margin: 5px;
+    font-size: 200%;
+}
+
+.remove-word {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 3px;
+}
