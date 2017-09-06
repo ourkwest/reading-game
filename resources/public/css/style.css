@@ -1,16 +1,23 @@
 /* some style */
 
+@import url('https://fonts.googleapis.com/css?family=Handlee');
 @import url('https://fonts.googleapis.com/css?family=Patrick+Hand');
 
 html {
     font-family:Arial, Helvetica, sans-serif;
     text-align: center;
+    background-color: black;
+}
+
+.white {
+    color: white;
 }
 
 #the-word {
     font-family:"Helvetica", cursive, sans-serif;
     font-family:"Futura";
     font-family:"Comic Sans MS", cursive, sans-serif;
+    font-family: 'Handlee', cursive;
     font-family: 'Patrick Hand', cursive;
     color: rgb(0,100,0);
     background-color: rgb(200,250,200);
@@ -53,8 +60,15 @@ html {
 }
 
 .remove-word {
-    color: blue;
+    color: rgb(100,100,255);
     text-decoration: underline;
     cursor: pointer;
     margin: 3px;
+}
+
+.plays {
+    font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Times, Symbola, Aegyptus, Code2000, Code2001, Code2002, Musica, serif, LastResort;
+    font-size: larger;
+    /*padding-right: 2px;
+    letter-spacing: 1px;*/
 }

@@ -47,20 +47,22 @@
   (println (get @state @profile)))
 
 
-(defn pick-word [{:keys [draw word discard]}]
+(defn pick-word [{:keys [draw word discard plays]}]
   (let [[next-word & next-draw] (shuffle draw)]
     {:draw    next-draw
      :word    next-word
-     :discard (vec (remove nil? (conj discard word)))}))
+     :discard (vec (remove nil? (conj discard word)))
+     :plays   (if plays (cons :correct plays) [])}))
 
-(defn pick-word-again [{:keys [draw word discard]}]
+(defn pick-word-again [{:keys [draw word discard plays]}]
   (let [[next-word & next-draw] (concat (shuffle draw) [word])]
     {:draw    next-draw
      :word    next-word
-     :discard discard}))
+     :discard discard
+     :plays   (cons :skip plays)}))
 
 (defn restack [{:keys [draw word discard]}]
-  {:draw (vec (set (cons word (concat draw discard))))})
+  {:draw (vec (set (remove nil? (concat [word] draw discard))))})
 
 (defn add-word [profile word]
   (pick-word {:draw    (conj (:discard profile) word)
@@ -68,8 +70,13 @@
   {:draw    []
    :discard (conj (:discard profile) word)})
 
+(defn finish [{:keys [draw word discard plays]}]
+  {:discard (concat draw [word] discard)
+   :plays plays})
+
 (defn add-word! []
   (let [word (.-value (.getElementById js/document "new-word"))]
+    (set! (.-value (.getElementById js/document "new-word")) "")
     (swap! state update @profile add-word word)))
 
 (defn remove-word! [word]
@@ -86,6 +93,9 @@
 (defn wrong! []
   (swap! state update @profile pick-word-again)
   (print-profile))
+
+(defn finish! []
+  (swap! state update @profile finish))
 
 (defn set-profile! [profile-name]
   (reset! profile profile-name)
@@ -116,7 +126,7 @@
 
 (defn hello-world []
 
-  (let [{:keys [word draw discard]} (get @state @profile)]
+  (let [{:keys [word draw discard plays]} (get @state @profile)]
 
     (println @profile)
     (println @state)
@@ -124,7 +134,7 @@
     (println word draw discard)
 
     [:div
-     [:h1 "Reading Game"]
+     [:h1 {:class "white"} "Reading Game"]
 
      [profile-select] [:br]
 
@@ -132,7 +142,26 @@
        [:div {:id "the-word-holder"}
         [:div {:id "the-word"} word]
         [:input {:key "correct" :class "big green" :type "button" :value "Correct!" :on-click correct!}]
-        [:input {:key "wrong" :class "big red" :type "button" :value "Skip" :on-click wrong!}]]
+        [:input {:key "wrong" :class "big red" :type "button" :value "Skip" :on-click wrong!}]
+
+        [:div {:class "plays"}
+         (for [[idx play] (map-indexed vector (reverse plays))]
+
+           (if (= play :correct)
+             [:span {:key   idx
+                     :class "play"} "\u2B50"]
+             [:span {:key   idx
+                     :class "play"} "\u2639" ])
+
+           )]
+
+        [:div
+         [:input {:key "wrong" :class "red" :type "button" :value "Skip to End" :on-click finish!}]]
+
+        ]
+
+
+
        [:div {:id "the-input-holder"}
 
         [:input {:key "new-word" :id "new-word" :type "text"}]
@@ -142,7 +171,8 @@
         [:input {:key "add-button" :class "big green" :type "button" :value "Go!" :on-click go!}]
 
         [:br]
-        [:span "Remove: "
+        [:span {:class "white"}
+         "Remove: "
 
          (for [word discard]
 
